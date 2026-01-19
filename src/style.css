@@ -1,0 +1,318 @@
+:root {
+  --bg-color: #1a1a1a;
+  --text-color: #e0e0e0;
+  --primary-color: #646cff; /* Example premium purple/blue */
+  --accent-color: #ff4081;
+  --card-bg: #fff;
+  --card-text: #333;
+  --dungeon-bg: #2a2a2a;
+  --success-color: #4caf50;
+  --danger-color: #f44336;
+  --staged-bg: rgba(255, 255, 255, 0.1);
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+#app {
+  width: 100%;
+  max-width: 1200px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #333;
+  padding-bottom: 10px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: var(--primary-color);
+}
+
+#status-bar {
+  display: flex;
+  gap: 20px;
+  font-weight: bold;
+}
+
+/* Dungeon Layout */
+#dungeon {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+  background-color: var(--dungeon-bg);
+  padding: 20px;
+  border-radius: 12px;
+  min-height: 400px;
+  align-items: start; /* Align to top */
+}
+
+.dungeon-col {
+  display: flex;
+  flex-direction: column;
+  gap: -60px; /* Stack effect */
+  align-items: center;
+  cursor: pointer; /* Interaction hint */
+  padding-bottom: 20px;
+}
+
+.dungeon-col:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+}
+
+/* Staged Cards */
+.staged-container {
+    display: flex;
+    flex-direction: column;
+    gap: -80px;
+    margin-top: 10px;
+    align-items: center;
+}
+
+.staged-card {
+    transform: scale(0.85); /* Slightly smaller to indicate sub-state */
+    margin-top: -50px; /* Tight stack */
+    border: 2px solid var(--primary-color);
+}
+
+.staged-container .staged-card:first-child {
+    margin-top: 0;
+}
+
+
+/* Player Area */
+#player-area {
+  display: grid;
+  grid-template-columns: 1fr 3fr 1fr; /* Deck, Hand, Discard */
+  gap: 15px;
+  align-items: center;
+  padding: 15px;
+  background-color: #222;
+  border-radius: 12px;
+  min-height: 150px;
+}
+
+#hand-container {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  min-height: 120px;
+  min-width: 200px;
+  background: rgba(0,0,0,0.2); /* Visual aid */
+  border-radius: 8px;
+}
+
+/* Card Styling */
+.card {
+  width: 80px;
+  height: 112px;
+  background-color: var(--card-bg);
+  color: var(--card-text);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  user-select: none;
+  position: relative;
+  border: 2px solid transparent;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 12px rgba(0,0,0,0.4);
+}
+
+.card.selected {
+  border-color: var(--primary-color);
+  transform: translateY(-10px);
+  box-shadow: 0 0 10px var(--primary-color);
+}
+
+.card.red {
+  color: #d32f2f;
+}
+
+.card.black {
+  color: #212121;
+}
+
+.card-back {
+  background: repeating-linear-gradient(
+    45deg,
+    #3b28cc,
+    #3b28cc 10px,
+    #8f3bdf 10px,
+    #8f3bdf 20px
+  );
+
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
+  border: 2px solid rgba(255,255,255,0.2);
+}
+
+/* Covered Monster - ensure visual stacking */
+.covered-monster, .top-monster {
+    margin-top: -80px; /* Stack overlap */
+}
+
+/* First card (bottom of stack) should have no margin top */
+.dungeon-col .card:first-child {
+    margin-top: 0;
+}
+
+/* Monster Cards (J, Q, K) */
+.monster {
+  border: 2px solid var(--danger-color);
+}
+
+/* Piles (Deck, Discard, Clear) */
+#power-deck-container,
+#discard-pile-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#discard-pile {
+  width: 80px;
+  height: 112px;
+  border: 2px dashed rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.8rem;
+  background-color: rgba(0, 0, 0, 0.2);
+  user-select: none;
+  transition: all 0.2s ease;
+}
+
+#discard-pile:hover {
+  border-color: rgba(255, 255, 255, 0.6);
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+/* Deck Stack Effect */
+#power-deck {
+  width: 80px;
+  height: 112px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  /* Using .card-back for base style */
+  position: relative;
+}
+
+/* Pseudo-elements to create a 'stack' look */
+#power-deck::before,
+#power-deck::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  background: inherit; /* Use same gradient */
+  border: 2px solid rgba(255,255,255,0.2);
+  z-index: -1;
+}
+
+#power-deck::before {
+  transform: translate(3px, 3px);
+}
+
+#power-deck::after {
+  transform: translate(6px, 6px);
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+}
+
+#power-deck:active {
+  transform: translate(2px, 2px);
+}
+#power-deck:active::after {
+  transform: translate(4px, 4px);
+}
+
+/* Controls */
+#controls {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+button {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.2s;
+}
+
+button:hover:not(:disabled) {
+  background-color: #535bf2;
+}
+
+button:disabled {
+  background-color: #444;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Modal */
+.hidden {
+  display: none !important;
+}
+
+#game-over-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #333;
+  padding: 40px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.modal-content h2 {
+    margin-top: 0;
+    color: var(--primary-color);
+}

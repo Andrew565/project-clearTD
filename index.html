@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Clear the Dungeon</title>
+    <link rel="stylesheet" href="./src/style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header>
+        <h1>Clear the Dungeon</h1>
+        <div id="status-bar">
+          <span id="score-display">Cards Remaining: <span id="score">0</span></span>
+          <span id="discard-display">Damage Limit: <span id="damage-count">0</span>/7</span>
+        </div>
+      </header>
+
+      <main id="game-board">
+        <section id="dungeon">
+          <!-- Columns will be injected here -->
+          <div class="dungeon-col" id="col-0"></div>
+          <div class="dungeon-col" id="col-1"></div>
+          <div class="dungeon-col" id="col-2"></div>
+          <div class="dungeon-col" id="col-3"></div>
+        </section>
+
+        <section id="player-area">
+            <div id="power-deck-container">
+                <div id="power-deck" class="card-back">Deck</div>
+            </div>
+
+            <div id="hand-container">
+                <!-- Hand cards injected here -->
+            </div>
+
+            <div id="discard-pile-container">
+                <div id="discard-pile">Discard</div>
+            </div>
+
+
+        </section>
+      </main>
+
+      <div id="game-over-modal" class="hidden">
+        <div class="modal-content">
+            <h2 id="modal-title">Game Over</h2>
+            <p id="modal-message"></p>
+            <button id="restart-btn">Try Again</button>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>
