@@ -123,6 +123,18 @@ export class Game {
             }
         }
 
+        // Validation: Third card must match monster suit
+        if (stagedInCol.length === 2) {
+            const monster = this.dungeon[colIndex][this.dungeon[colIndex].length - 1];
+            if (monster) {
+                const isJoker = card.suit === 'Joker';
+                const suitMatches = card.suit === monster.suit;
+                if (!isJoker && !suitMatches) {
+                    return false;
+                }
+            }
+        }
+
         this.saveState();
 
         // Remove from hand
