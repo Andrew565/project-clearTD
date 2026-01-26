@@ -20,6 +20,9 @@ const modalMessage = document.getElementById('modal-message');
 const restartBtn = document.getElementById('restart-btn');
 const discardPileEl = document.getElementById('discard-pile');
 const undoBtn = document.getElementById('undo-btn');
+const instructionsBtn = document.getElementById('instructions-btn');
+const instructionsDialog = document.getElementById('instructions-dialog');
+const closeInstructionsBtn = document.getElementById('close-instructions-btn');
 
 // Game State
 let game;
@@ -54,7 +57,7 @@ discardPileEl.addEventListener('click', (e) => {
     }
 });
 
-undoBtn.addEventListener('click', (e) => {
+undoBtn?.addEventListener('click', (e) => {
     e.stopPropagation();
     const success = game.undo();
     if (success) render();
@@ -65,6 +68,32 @@ undoBtn.addEventListener('click', (e) => {
 restartBtn.addEventListener('click', () => {
     modal.classList.add('hidden');
     init();
+});
+
+instructionsBtn?.addEventListener('click', () => {
+    if (instructionsDialog instanceof HTMLDialogElement) {
+        instructionsDialog.showModal();
+    }
+});
+
+closeInstructionsBtn?.addEventListener('click', () => {
+    if (instructionsDialog instanceof HTMLDialogElement) {
+        instructionsDialog.close();
+    }
+});
+
+// Close dialog when clicking outside
+instructionsDialog?.addEventListener('click', (e) => {
+    if (!(instructionsDialog instanceof HTMLDialogElement)) return;
+    const dialogDimensions = instructionsDialog.getBoundingClientRect();
+    if (
+      e.clientX < dialogDimensions.left ||
+      e.clientX > dialogDimensions.right ||
+      e.clientY < dialogDimensions.top ||
+      e.clientY > dialogDimensions.bottom
+    ) {
+      instructionsDialog.close();
+    }
 });
 
 // Rendering Logic

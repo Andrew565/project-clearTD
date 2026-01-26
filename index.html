@@ -13,6 +13,7 @@
         <div id="status-bar">
           <span id="score-display">Cards Remaining: <span id="score">0</span></span>
           <span id="discard-display">Damage Limit: <span id="damage-count">0</span>/7</span>
+          <button id="instructions-btn" class="control-btn">How to Play</button>
         </div>
       </header>
 
@@ -50,6 +51,34 @@
             <button id="restart-btn">Try Again</button>
         </div>
       </div>
+
+      <dialog id="instructions-dialog">
+        <div class="modal-content">
+          <h2>Clear the Dungeon - Rules</h2>
+          <div class="instructions-body">
+            <h3>Overview</h3>
+            <p>Destroy all of the dungeon monsters to win the game. You are a monster exterminator hired by the King. You must use powerful attacks and exploit monster weaknesses to clear dungeon cells before running out of power.</p>
+
+            <h3>Setup</h3>
+            <p>The dungeon has four columns of monsters. Each column has three cards, with the top card revealed.</p>
+
+            <h3>How to Attack</h3>
+            <p>To defeat a monster (Jack: 11, Queen: 12, King: 13), you must use exactly <strong>three cards</strong>:</p>
+            <ul>
+              <li><strong>Step 1 (Power):</strong> The first two cards added together must equal or exceed the monster's power level.</li>
+              <li><strong>Step 2 (Weakness):</strong> The third card must match the monster's suit.</li>
+            </ul>
+            <p>Jokers are worth 10 power and can act as any suit.</p>
+
+            <h3>Damage & Survival</h3>
+            <p>Cards that cannot be played must be discarded to your damage pile. If your damage pile reaches <strong>7 cards</strong>, you lose.</p>
+
+            <h3>Winning</h3>
+            <p>Defeat all monsters before the power deck runs out. Your score is the number of cards remaining in your power deck.</p>
+          </div>
+          <button id="close-instructions-btn">Close</button>
+        </div>
+      </dialog>
     </div>
     <script type="module" src="./src/main.js"></script>
   </body>

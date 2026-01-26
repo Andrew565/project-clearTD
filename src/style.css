@@ -303,3 +303,84 @@ button:disabled {
     margin-top: 0;
     color: var(--primary-color);
 }
+
+/* Instructions Dialog */
+#instructions-dialog {
+    background: transparent;
+    border: none;
+    padding: 0;
+    max-width: 600px;
+    width: 90%;
+}
+
+#instructions-dialog::backdrop {
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(4px);
+}
+
+#instructions-dialog .modal-content {
+    background: #222;
+    border: 1px solid #444;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    text-align: left;
+    padding: 30px;
+}
+
+#instructions-dialog h2 {
+    text-align: center;
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    background: linear-gradient(to right, var(--primary-color), var(--accent-color));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.instructions-body {
+    max-height: 60vh;
+    overflow-y: auto;
+    margin-bottom: 20px;
+    padding-right: 10px;
+}
+
+.instructions-body h3 {
+    color: var(--primary-color);
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+    border-left: 3px solid var(--primary-color);
+    padding-left: 10px;
+}
+
+.instructions-body p {
+    line-height: 1.6;
+    margin: 10px 0;
+    color: #bbb;
+}
+
+.instructions-body ul {
+    color: #bbb;
+    padding-left: 20px;
+}
+
+.instructions-body li {
+    margin-bottom: 8px;
+}
+
+#close-instructions-btn {
+    display: block;
+    margin: 0 auto;
+    padding: 12px 30px;
+}
+
+#instructions-btn {
+    margin-left: 10px;
+    background: rgba(100, 108, 255, 0.1);
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+}
+
+#instructions-btn:hover {
+    background: var(--primary-color);
+    color: white;
+}
