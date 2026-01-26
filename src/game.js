@@ -104,12 +104,26 @@ export class Game {
     assignCardToColumn(colIndex) {
         if (this.selectedCardIndex === null) return false;
 
-        this.saveState();
-
-        // Check valid column?
+        // Check valid column
         if (colIndex < 0 || colIndex > 3) return false;
 
         const card = this.hand[this.selectedCardIndex];
+        const stagedInCol = this.stagedCards[colIndex] || [];
+
+        // Validation: Second card must meet power requirement
+        if (stagedInCol.length === 1) {
+            const monster = this.dungeon[colIndex][this.dungeon[colIndex].length - 1];
+            if (monster) {
+                const monsterPower = this.getMonsterPower(monster);
+                const currentPower = this.getCardValue(stagedInCol[0]);
+                const newPower = this.getCardValue(card);
+                if (currentPower + newPower < monsterPower) {
+                    return false;
+                }
+            }
+        }
+
+        this.saveState();
 
         // Remove from hand
         this.hand.splice(this.selectedCardIndex, 1);
