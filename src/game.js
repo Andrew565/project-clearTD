@@ -1,8 +1,39 @@
-import { DeckOfCards, StandardCards } from '@andrewscripts/deck-of-cards.js';
+const SUITS = ['Spades', 'Hearts', 'Diamonds', 'Clubs'];
+const RANKS = [
+    { nameRank: 'Ace', initial: 'A' },
+    { nameRank: 'Two', initial: '2' },
+    { nameRank: 'Three', initial: '3' },
+    { nameRank: 'Four', initial: '4' },
+    { nameRank: 'Five', initial: '5' },
+    { nameRank: 'Six', initial: '6' },
+    { nameRank: 'Seven', initial: '7' },
+    { nameRank: 'Eight', initial: '8' },
+    { nameRank: 'Nine', initial: '9' },
+    { nameRank: 'Ten', initial: '10' },
+    { nameRank: 'Jack', initial: 'J' },
+    { nameRank: 'Queen', initial: 'Q' },
+    { nameRank: 'King', initial: 'K' }
+];
+
+function createDeck() {
+    const deck = [];
+    for (const suit of SUITS) {
+        for (const rank of RANKS) {
+            deck.push({
+                suit: suit,
+                nameRank: rank.nameRank,
+                initial: rank.initial
+            });
+        }
+    }
+    // Add 2 Jokers
+    deck.push({ suit: 'Joker', nameRank: 'Joker', initial: 'JK' });
+    deck.push({ suit: 'Joker', nameRank: 'Joker', initial: 'JK' });
+    return deck;
+}
 
 export class Game {
     constructor() {
-        this.deck = null;
         this.dungeon = [[], [], [], []]; // 4 columns
         this.powerDeck = [];
         this.hand = [];
@@ -15,9 +46,6 @@ export class Game {
     }
 
     setup() {
-        this.deck = new DeckOfCards(StandardCards.standard52DeckOfCardsWithJokers);
-        this.deck.shuffle();
-
         this.dungeon = [[], [], [], []];
         this.stagedCards = [[], [], [], []];
         this.powerDeck = [];
@@ -27,7 +55,8 @@ export class Game {
         this.selectedCardIndex = null;
         this.history = [];
 
-        const allCards = this.deck.drawFromDrawPile(this.deck.drawPile.length);
+        const allCards = createDeck();
+        this.shuffleArray(allCards);
 
         const monsters = allCards.filter(c => ['Jack', 'Queen', 'King'].includes(c.nameRank));
         const powerCards = allCards.filter(c => !['Jack', 'Queen', 'King'].includes(c.nameRank));
