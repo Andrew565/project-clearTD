@@ -18,7 +18,8 @@ const modal = document.getElementById('game-over-modal');
 const modalTitle = document.getElementById('modal-title');
 const modalMessage = document.getElementById('modal-message');
 const restartBtn = document.getElementById('restart-btn');
-const discardPileEl = document.getElementById('discard-pile'); // New
+const discardPileEl = document.getElementById('discard-pile');
+const undoBtn = document.getElementById('undo-btn');
 
 // Game State
 let game;
@@ -32,14 +33,7 @@ function init() {
 
 const powerDeckContainer = document.getElementById('power-deck-container');
 
-// Event Listeners
-// Attach to container to ensure hit
-powerDeckContainer.addEventListener('click', () => {
-  if (game) {
-    game.drawHand();
-    render();
-  }
-});
+// Drawing is now automatic when the hand is empty.
 
 // Column Selection - Assign Card
 dungeonCols.forEach((colEl, index) => {
@@ -52,12 +46,18 @@ dungeonCols.forEach((colEl, index) => {
 });
 
 // Discard Pile - Discard Selected
-// Use parent container click for broader target or direct element
-discardPileEl.parentElement.addEventListener('click', () => {
+discardPileEl.addEventListener('click', (e) => {
+    e.stopPropagation();
     if (game.gameState === 'PLAY') {
         const success = game.discardSelectedCard();
         if (success) render();
     }
+});
+
+undoBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const success = game.undo();
+    if (success) render();
 });
 
 
@@ -131,6 +131,9 @@ function render() {
 
     // Attack button hidden
     if(attackBtn) attackBtn.style.display = 'none';
+
+    // 4. Update Undo Button
+    undoBtn.disabled = game.history.length === 0;
 
     // 5. Check Game Over
     const status = game.checkWinLoss();

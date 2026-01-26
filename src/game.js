@@ -11,6 +11,7 @@ export class Game {
         this.clearPile = [];
         this.gameState = 'SETUP'; // SETUP, DRAW, PLAY, GAME_OVER
         this.selectedCardIndex = null; // Single selection
+        this.history = [];
     }
 
     setup() {
@@ -24,6 +25,7 @@ export class Game {
         this.discardPile = [];
         this.clearPile = [];
         this.selectedCardIndex = null;
+        this.history = [];
 
         const allCards = this.deck.drawFromDrawPile(this.deck.drawPile.length);
 
@@ -46,6 +48,7 @@ export class Game {
         this.shuffleArray(this.powerDeck);
 
         this.gameState = 'DRAW';
+        this.drawHand();
     }
 
     drawHand() {
@@ -72,6 +75,8 @@ export class Game {
     assignCardToColumn(colIndex) {
         if (this.selectedCardIndex === null) return false;
 
+        this.saveState();
+
         // Check valid column?
         if (colIndex < 0 || colIndex > 3) return false;
 
@@ -90,17 +95,27 @@ export class Game {
             this.attemptAttack(colIndex);
         }
 
+        if (this.hand.length === 0) {
+            this.drawHand();
+        }
+
         return true;
     }
 
     discardSelectedCard() {
          if (this.selectedCardIndex === null) return false;
 
+         this.saveState();
+
          const card = this.hand[this.selectedCardIndex];
          this.hand.splice(this.selectedCardIndex, 1);
          this.selectedCardIndex = null;
 
          this.discardPile.push(card);
+
+         if (this.hand.length === 0) {
+             this.drawHand();
+         }
 
          return true;
     }
@@ -154,6 +169,7 @@ export class Game {
     }
 
     resolveTurn() {
+        this.saveState();
         // Discard remaining hand
         this.discardPile.push(...this.hand);
         this.hand = [];
@@ -196,6 +212,40 @@ export class Game {
         if (card.nameRank === 'Queen') return 12;
         if (card.nameRank === 'King') return 13;
         return 0;
+    }
+
+    saveState() {
+        const state = {
+            dungeon: JSON.parse(JSON.stringify(this.dungeon)),
+            powerDeck: JSON.parse(JSON.stringify(this.powerDeck)),
+            hand: JSON.parse(JSON.stringify(this.hand)),
+            stagedCards: JSON.parse(JSON.stringify(this.stagedCards)),
+            discardPile: JSON.parse(JSON.stringify(this.discardPile)),
+            clearPile: JSON.parse(JSON.stringify(this.clearPile)),
+            gameState: this.gameState,
+            selectedCardIndex: this.selectedCardIndex
+        };
+        this.history.push(state);
+        // Limit history to 20 moves to keep it manageable
+        if (this.history.length > 20) {
+            this.history.shift();
+        }
+    }
+
+    undo() {
+        if (this.history.length === 0) return false;
+
+        const state = this.history.pop();
+        this.dungeon = state.dungeon;
+        this.powerDeck = state.powerDeck;
+        this.hand = state.hand;
+        this.stagedCards = state.stagedCards;
+        this.discardPile = state.discardPile;
+        this.clearPile = state.clearPile;
+        this.gameState = state.gameState;
+        this.selectedCardIndex = null;
+
+        return true;
     }
 
     shuffleArray(array) {
